@@ -1,13 +1,10 @@
-import 'dart:io';
-import 'dart:typed_data';
+
 import 'dart:ui';
 import 'package:flutter/foundation.dart';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:cached_network_image/cached_network_image.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:image_downloader/image_downloader.dart';
+
 
 class ImageView extends StatefulWidget {
 
@@ -44,8 +41,8 @@ class _ImageViewState extends State<ImageView> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 GestureDetector(
-                  onTap: (){
-                    _save();
+                  onTap: () async{
+                      await ImageDownloader.downloadImage(widget.imgUrl);
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width /2,
@@ -86,29 +83,22 @@ class _ImageViewState extends State<ImageView> {
     );
   }
 
-  _save() async {
-    if(Platform.isAndroid){
-      await _askPermission();
-    }
-      var response = await Dio().get(widget.imgUrl,
-          options: Options(responseType: ResponseType.bytes));
-      final result =
-      await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
-      print(result);
-      Navigator.pop(context);
+  // _save() async {
+  //   if(Platform.isAndroid){
+  //     await _askPermission();
+  //   }
+  //     var response = await Dio().get(widget.imgUrl,
+  //         options: Options(responseType: ResponseType.bytes));
+  //     final result =
+  //     await ImageGallerySaver.saveImage(Uint8List.fromList(response.data));
+  //     print(result);
+  //     Navigator.pop(context);
+  //
+  //
+  //
+  // }
 
 
-
-  }
-
-  _askPermission() async {
-    if (Platform.isIOS) {
-      Map<PermissionGroup, PermissionStatus> permissions = await PermissionHandler().requestPermissions([PermissionGroup.photos]);
-    } else {
-      PermissionStatus permission = await PermissionHandler()
-          .checkPermissionStatus(PermissionGroup.storage);
-    }
-  }
 
   // _askPermission() async {
   //   if (Platform.isIOS) {

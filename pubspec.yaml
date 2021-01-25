@@ -31,7 +31,8 @@ dependencies:
   http:
   page_transition:
   image_gallery_saver:
-  permission_handler: ^4.2.0+hotfix.3
+  permission_handler: ^5.0.1+1
+  image_downloader: ^0.20.1
   dio:
   random_string:
   cached_network_image:
